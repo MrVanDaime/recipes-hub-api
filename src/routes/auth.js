@@ -1,12 +1,12 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const generateToken = require('../utils/auth');
 
 const router = express.Router();
 
 // Registration route
-router.post("/register", async (req, res) => {
+router.post('/register', async (req, res) => {
   const {name, email, password} = req.body;
 
   try {
@@ -27,25 +27,37 @@ router.post("/register", async (req, res) => {
 
     await user.save();
 
-    const payload = {
-      user: {
-        id: user.id,
-      },
-    };
-
-    jwt.sign(
-      payload,
-      process.env.JWT_SECRET,
-      { expiresIn: 360000 },
-      (err, token) => {
-        if (err) throw err;
-        res.status(200).json({ msg: 'User registered successfully', token }); // Explicitly send a 200 status
-      }
-    );
+    const msg = "User registered successfully";
+    generateToken(user.id, msg, res);
 
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server error");
+  }
+});
+
+// Login route
+router.post('/login', async (req, res) => {
+  const {email, password} = req.body;
+
+  try {
+    let user = await User.findOne({email});
+
+    if (!user) {
+      return res.status(400).json({ msg: 'Invalid credentials' });
+    }
+
+    const isMatch = await bcrypt.compare( password, user.password );
+
+    if (!isMatch) {
+      return res.status(400).json({ msg: 'Invalid credentials' }); 
+    }
+
+    const msg = "User logged in successfully";
+    generateToken(user.id, msg, res);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send( 'Server error' );
   }
 });
 
