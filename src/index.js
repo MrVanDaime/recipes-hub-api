@@ -1,5 +1,4 @@
 const express = require('express');
-const connectDB = require('./config/db');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 
@@ -7,11 +6,9 @@ dotenv.config();
 
 const app = express();
 
-// Connect to DB
-connectDB();
-
 app.use(bodyParser.json());
 
+require('./startup/db')();
 require("./startup/cors")(app);
 require("./startup/routes")(app);
 
