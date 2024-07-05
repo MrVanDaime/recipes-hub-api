@@ -2,11 +2,16 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const generateToken = require('../utils/auth');
+const {registerValidation, loginValidation} = require('../validation/auth');
 
 const router = express.Router();
 
 // Registration route
 router.post('/register', async (req, res) => {
+  // Validate req.body
+  const {error} = registerValidation(req.body);
+  if (error) return res.status(400).json({ msg: error.details[0].message });
+
   const {name, email, password} = req.body;
 
   try {
@@ -38,6 +43,10 @@ router.post('/register', async (req, res) => {
 
 // Login route
 router.post('/login', async (req, res) => {
+  // Validate req.body
+  const {error} = loginValidation(req.body);
+  if (error) return res.status(400).json({ msg: error.details[0].message });
+  
   const {email, password} = req.body;
 
   try {
