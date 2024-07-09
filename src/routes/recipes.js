@@ -40,7 +40,8 @@ router.post('/', auth, async (req, res) => {
     category,
     title,
     ingredients,
-    directions
+    directions,
+    imageUrl
   } = req.body;
 
   // Check if category exists
@@ -53,7 +54,8 @@ router.post('/', auth, async (req, res) => {
       category,
       title,
       ingredients,
-      directions
+      directions,
+      imageUrl
     });
 
     await recipe.save();

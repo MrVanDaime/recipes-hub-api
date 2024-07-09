@@ -29,6 +29,9 @@ const RecipeSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 1024
   },
+  imageUrl: {
+    type: String
+  },
   date_published: {
     type: Date,
     default: Date.now
