@@ -1,4 +1,5 @@
 const jwt = require('jsonwebtoken');
+const { jwtSecret } = require('../config/env');
 
 const generateToken = (userId, msg, res) => {
   const payload = {
@@ -9,7 +10,7 @@ const generateToken = (userId, msg, res) => {
   
   jwt.sign(
     payload,
-    process.env.JWT_SECRET,
+    jwtSecret,
     { expiresIn: 360000 },
     (err, token) => {
       if (err) throw err;
