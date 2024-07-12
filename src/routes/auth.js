@@ -7,7 +7,7 @@ const {registerValidation, loginValidation} = require('../validation/auth');
 const router = express.Router();
 
 // Registration route
-router.post('/register', async (req, res) => {
+router.post('/register', async (req, res, next) => {
   // Validate req.body
   const {error} = registerValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -37,12 +37,12 @@ router.post('/register', async (req, res) => {
 
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server error");
+    next(err);
   }
 });
 
 // Login route
-router.post('/login', async (req, res) => {
+router.post('/login', async (req, res, next) => {
   // Validate req.body
   const {error} = loginValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -66,7 +66,7 @@ router.post('/login', async (req, res) => {
     generateToken(user.id, msg, res);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send( 'Server error' );
+    next(err);
   }
 });
 

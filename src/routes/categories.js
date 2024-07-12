@@ -6,18 +6,18 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Get all
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const categories = await Category.find().sort('title');
     res.status(200).json({ categories });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Get single
-router.get('/:id', async (req, res) => {
+router.get('/:id', async (req, res, next) => {
   try {
     const category = await Category.findById( req.params.id );
     if (!category) return res.status(404).json({ msg: 'Category not found' });
@@ -25,12 +25,12 @@ router.get('/:id', async (req, res) => {
     res.status(200).json({ category });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Register new
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req, res, next) => {
   // Validate req.body
   const {error} = categoryValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -47,12 +47,12 @@ router.post('/', auth, async (req, res) => {
     res.status(201).json({ msg: 'Category registered successfully', category })
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Update only if is the OP
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, async (req, res, next) => {
   // Validate req.body
   const {error} = categoryValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -79,12 +79,12 @@ router.put('/:id', auth, async (req, res) => {
     res.status(200).json({ msg: 'Category updated successfully', category });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Delete only if is the OP
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req, res, next) => {
   try {
     // Find category by ID
     let category = await Category.findById( req.params.id );
@@ -99,7 +99,7 @@ router.delete('/:id', auth, async (req, res) => {
     res.status(200).json({ msg: 'Category deleted successfully', category });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 

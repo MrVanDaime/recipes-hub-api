@@ -7,18 +7,18 @@ const auth = require('../middleware/auth');
 const router = express.Router();
 
 // Get All
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
   try {
     const recipes = await Recipe.find().sort('date_published');
     res.status(200).json({ recipes });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Get single
-router.get('/:id', async ( req, res ) => {
+router.get('/:id', async ( req, res, next ) => {
   try {
     const recipe = await Recipe.findById( req.params.id );
     if (!recipe) return res.status(404).json({ msg: 'Recipe not found' });
@@ -26,12 +26,12 @@ router.get('/:id', async ( req, res ) => {
     res.status(200).json({ recipe });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Register new
-router.post('/', auth, async (req, res) => {
+router.post('/', auth, async (req, res, next) => {
   // Validate req.body
   const {error} = recipeValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -62,12 +62,12 @@ router.post('/', auth, async (req, res) => {
     res.status(201).json({ msg: 'Recipe registered successfully', recipe })
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Update only if is the OP
-router.put('/:id', auth, async (req, res) => {
+router.put('/:id', auth, async (req, res, next) => {
   // Validate req.body
   const {error} = recipeValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
@@ -98,12 +98,12 @@ router.put('/:id', auth, async (req, res) => {
     res.status(200).json({ msg: 'Recipe updated successfully', recipe });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
 // Delete only if is the OP
-router.delete('/:id', auth, async (req, res) => {
+router.delete('/:id', auth, async (req, res, next) => {
   try {
     // Find recipe by ID
     let recipe = await Recipe.findById( req.params.id );
@@ -118,7 +118,7 @@ router.delete('/:id', auth, async (req, res) => {
     res.status(200).json({ msg: 'Recipe deleted successfully', recipe });
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ msg: 'Server error' });
+    next(err);
   }
 });
 
