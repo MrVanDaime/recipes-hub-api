@@ -2,20 +2,20 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const generateToken = require('../utils/auth');
-const {registerValidation, loginValidation} = require('../validation/auth');
+const { registerValidation, loginValidation } = require('../validation/auth');
 
 const router = express.Router();
 
 // Registration route
 router.post('/register', async (req, res, next) => {
   // Validate req.body
-  const {error} = registerValidation(req.body);
+  const { error } = registerValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
 
-  const {name, email, password} = req.body;
+  const { name, email, password } = req.body;
 
   try {
-    let user = await User.findOne({email});
+    let user = await User.findOne({ email });
 
     if (user) {
       return res.status(400).json({ msg: "User already exists" });
@@ -44,22 +44,22 @@ router.post('/register', async (req, res, next) => {
 // Login route
 router.post('/login', async (req, res, next) => {
   // Validate req.body
-  const {error} = loginValidation(req.body);
+  const { error } = loginValidation(req.body);
   if (error) return res.status(400).json({ msg: error.details[0].message });
-  
-  const {email, password} = req.body;
+
+  const { email, password } = req.body;
 
   try {
-    let user = await User.findOne({email});
+    let user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
+      return res.status(404).json({ msg: 'User not found' });
     }
 
-    const isMatch = await bcrypt.compare( password, user.password );
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid credentials' }); 
+      return res.status(400).json({ msg: 'Invalid credentials' });
     }
 
     const msg = "User logged in successfully";
