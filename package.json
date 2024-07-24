@@ -5,10 +5,11 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon src/index.js",
-    "test": "jest"
+    "test": "jest --runInBand --verbose --coverage --detectOpenHandles src/tests"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "verbose": true
   },
   "keywords": [],
   "author": "jc",
