@@ -43,7 +43,7 @@ describe('/api/auth', () => {
   describe('/register', () => {
     it('should handle error 500', async () => {
       jest.spyOn(User, 'findOne').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (POST /auth/register)');
       });
 
       const res = await request(server)
@@ -101,7 +101,7 @@ describe('/api/auth', () => {
 
     it('should handle error 500', async () => {
       jest.spyOn(User, 'findOne').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (POST /auth/login)');
       });
 
       const res = await request(server)

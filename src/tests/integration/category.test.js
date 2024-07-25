@@ -2,7 +2,6 @@ const request = require('supertest');
 const mongoose = require('mongoose');
 const Category = require('../../models/category');
 const User = require('../../models/user');
-const { JsonWebTokenError } = require('jsonwebtoken');
 let server;
 
 // Dummy data
@@ -67,7 +66,7 @@ describe('/api/categories', () => {
   describe('GET /', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Category, 'find').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (GET /categories)');
       });
 
       const res = await request(server).get('/api/categories');
@@ -98,7 +97,7 @@ describe('/api/categories', () => {
   describe('GET :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Category, 'findById').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (GET:id /categories');
       });
 
       const res = await request(server).get('/api/categories/' + '1');
@@ -133,7 +132,7 @@ describe('/api/categories', () => {
   describe('POST', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Category.prototype, 'save').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (POST /categories');
       });
 
       const res = await createCategory(dummyUserToken, categoryPayload.filled);
@@ -166,7 +165,7 @@ describe('/api/categories', () => {
   describe('PUT :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Category, 'findByIdAndUpdate').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (PUT /categories');
       });
 
       const category = await createCategory(dummyUserToken, categoryPayload.filled);
@@ -234,7 +233,7 @@ describe('/api/categories', () => {
   describe('DELETE :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Category, 'findByIdAndDelete').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (DELETE /categories');
       });
 
       const category = await createCategory(dummyUserToken, categoryPayload.filled);

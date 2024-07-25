@@ -84,7 +84,7 @@ describe('/api/recipes', () => {
   describe('GET /', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Recipe, 'find').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (GET /recipes)');
       });
 
       const res = await request(server).get('/api/recipes');
@@ -115,7 +115,7 @@ describe('/api/recipes', () => {
   describe('GET :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Recipe, 'findById').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (GET:id /recipes)');
       });
 
       const res = await request(server).get('/api/recipes/' + '1');
@@ -156,7 +156,7 @@ describe('/api/recipes', () => {
   describe('POST', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Recipe.prototype, 'save').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (POST /recipes)');
       });
 
       const res = await createRecipe(
@@ -208,7 +208,7 @@ describe('/api/recipes', () => {
   describe('PUT :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Recipe, 'findByIdAndUpdate').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (PUT /recipes)');
       });
 
       const recipe = await createRecipe(
@@ -303,7 +303,7 @@ describe('/api/recipes', () => {
   describe('DELETE :id', () => {
     it('should handle error 500', async () => {
       jest.spyOn(Recipe, 'findByIdAndDelete').mockImplementation(() => {
-        throw new Error('Server error');
+        throw new Error('Test server error (DELETE /recipes)');
       });
 
       const recipe = await createRecipe(
