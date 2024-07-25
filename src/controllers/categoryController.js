@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const Category = require('../models/category');
 const { categoryValidation } = require('../validation/category');
 
@@ -6,7 +7,7 @@ const getAllCategories = async (req, res, next) => {
     const categories = await Category.find().sort('title');
     res.status(200).json({ categories });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -18,7 +19,7 @@ const getCategoryById = async (req, res, next) => {
 
     res.status(200).json({ category });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -39,7 +40,7 @@ const createCategory = async (req, res, next) => {
     await category.save();
     res.status(201).json({ msg: 'Category registered successfully', category })
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -70,7 +71,7 @@ const updateCategory = async (req, res, next) => {
 
     res.status(200).json({ msg: 'Category updated successfully', category });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -89,7 +90,7 @@ const deleteCategory = async (req, res, next) => {
 
     res.status(200).json({ msg: 'Category deleted successfully', category });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };

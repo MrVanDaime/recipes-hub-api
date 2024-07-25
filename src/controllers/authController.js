@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const bcrypt = require("bcrypt");
 const User = require("../models/user");
 const generateToken = require('../utils/auth');
@@ -32,7 +33,7 @@ const registerUser = async (req, res, next) => {
     generateToken(user.id, msg, res);
 
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -60,7 +61,7 @@ const loginUser = async (req, res, next) => {
     const msg = "User logged in successfully";
     generateToken(user.id, msg, res);
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };

@@ -1,3 +1,4 @@
+const logger = require('../utils/logger');
 const Recipe = require('../models/recipe');
 const { recipeValidation } = require('../validation/recipe');
 const Category = require('../models/category');
@@ -7,7 +8,7 @@ const getAllRecipes = async (req, res, next) => {
     const recipes = await Recipe.find().sort('date_published');
     res.status(200).json({ recipes });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -19,7 +20,7 @@ const getRecipeById = async (req, res, next) => {
 
     res.status(200).json({ recipe });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -54,7 +55,7 @@ const createRecipe = async (req, res, next) => {
     await recipe.save();
     res.status(201).json({ msg: 'Recipe registered successfully', recipe })
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -89,7 +90,7 @@ const updateRecipe = async (req, res, next) => {
 
     res.status(200).json({ msg: 'Recipe updated successfully', recipe });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };
@@ -108,7 +109,7 @@ const deleteRecipe = async (req, res, next) => {
 
     res.status(200).json({ msg: 'Recipe deleted successfully', recipe });
   } catch (err) {
-    console.error(err.message);
+    logger.error(err.message);
     next(err);
   }
 };

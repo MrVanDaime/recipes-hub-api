@@ -7,3 +7,6 @@
 # Environment variables
 /src/config/development.js
 /src/config/test.js
+
+# logs
+/src/logs/*.log
